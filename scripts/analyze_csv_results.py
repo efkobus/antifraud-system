@@ -122,28 +122,28 @@ def load_and_test_csv(csv_path='data/transactional-sample.csv'):
     print(f"   Specificity:          {specificity:.2f}%  (of legitimate, how many approved)")
     print(f"   F1 Score:             {f1_score:.2f}%  (balance of precision & recall)")
     
-    print(f"\n💰 BUSINESS IMPACT:")
-    print(f"   Frauds Caught:        {results['correct_deny']}/{actual_frauds} ({results['correct_deny']/actual_frauds*100:.1f}%) 🎯")
+    print(f"\nBUSINESS IMPACT:")
+    print(f"   Frauds Caught:        {results['correct_deny']}/{actual_frauds} ({results['correct_deny']/actual_frauds*100:.1f}%)")
     
     fraud_caught_amount = sum([r['amount'] for r in recommendations if r['recommendation']=='deny' and r['actual_fraud']])
     fraud_missed_amount = sum([r['amount'] for r in recommendations if r['recommendation']=='approve' and r['actual_fraud']])
     false_positive_amount = sum([r['amount'] for r in recommendations if r['recommendation']=='deny' and not r['actual_fraud']])
     
     print(f"   Fraud Prevented:      ${fraud_caught_amount:,.2f} 💵")
-    print(f"   Frauds Missed:        {results['false_negative']} transactions (${fraud_missed_amount:,.2f} lost) ⚠️")
-    print(f"   False Alarms:         {results['false_positive']} transactions (${false_positive_amount:,.2f} friction) 😞")
+    print(f"   Frauds Missed:        {results['false_negative']} transactions (${fraud_missed_amount:,.2f} lost)")
+    print(f"   False Alarms:         {results['false_positive']} transactions (${false_positive_amount:,.2f} friction)")
     print(f"   Legitimate Approved:  {results['correct_approve']} transactions ✅")
     
     fraud_saved = fraud_caught_amount + (results['correct_deny'] * 25)
     friction_cost = results['false_positive'] * 5
     net_benefit = fraud_saved - friction_cost
     
-    print(f"\n💡 ESTIMATED ROI:")
+    print(f"\nESTIMATED ROI:")
     print(f"   Fraud Saved:          ${fraud_saved:,.2f} (amount + chargeback fees)")
     print(f"   Customer Friction:    -${friction_cost:,.2f} (declined legitimate)")
     print(f"   Net Benefit:          ${net_benefit:,.2f} {'✅' if net_benefit > 0 else '⚠️'}")
     
-    print(f"\n🔍 FRAUD DETAILS:")
+    print(f"\nFRAUD DETAILS:")
     fraud_recs = [r for r in recommendations if r['actual_fraud']]
     if len(fraud_recs) > 0:
         caught = [r for r in fraud_recs if r['recommendation'] == 'deny']
@@ -154,7 +154,7 @@ def load_and_test_csv(csv_path='data/transactional-sample.csv'):
         print(f"   Lost:                 ${sum([r['amount'] for r in missed]):,.2f} ({len(missed)} txns)")
         
         if len(missed) > 0:
-            print(f"\n⚠️  TOP MISSED FRAUDS (opportunities for improvement):")
+            print(f"\nTOP MISSED FRAUDS (opportunities for improvement):")
             missed_sorted = sorted(missed, key=lambda x: x['amount'], reverse=True)
             for i, m in enumerate(missed_sorted[:5], 1):
                 print(f"      {i}. Transaction {m['transaction_id']}: User {m['user_id']}, ${m['amount']:.2f}")
