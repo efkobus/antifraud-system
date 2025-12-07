@@ -67,13 +67,13 @@ def load_and_test_csv(csv_path='data/transactional-sample.csv'):
             })
             
             if recommendation == 'deny' and actual_fraud:
-                results['correct_deny'] += 1  # ✅ Caught fraud!
+                results['correct_deny'] += 1
             elif recommendation == 'approve' and not actual_fraud:
-                results['correct_approve'] += 1  # ✅ Approved legitimate
+                results['correct_approve'] += 1
             elif recommendation == 'deny' and not actual_fraud:
-                results['false_positive'] += 1  # ⚠️ Denied legitimate (customer friction)
+                results['false_positive'] += 1
             elif recommendation == 'approve' and actual_fraud:
-                results['false_negative'] += 1  # ❌ Missed fraud (financial loss)
+                results['false_negative'] += 1
             
             processed += 1
             
@@ -95,7 +95,7 @@ def load_and_test_csv(csv_path='data/transactional-sample.csv'):
     print(f"\nDataset: {csv_path}")
     print(f"Transactions analyzed: {processed:,} | Frauds: {actual_frauds} ({actual_frauds/total_transactions*100:.1f}%)")
     
-    print(f"\n📊 CONFUSION MATRIX:")
+    print(f"\nCONFUSION MATRIX:")
     print(f"{'':30} │ Predicted DENY │ Predicted APPROVE")
     print(f"{'─' * 70}")
     print(f"{'Actual FRAUD':30} │ {results['correct_deny']:14} │ {results['false_negative']:17}")
@@ -115,7 +115,7 @@ def load_and_test_csv(csv_path='data/transactional-sample.csv'):
     total_legitimate = results['correct_approve'] + results['false_positive']
     specificity = results['correct_approve'] / total_legitimate * 100 if total_legitimate > 0 else 0
     
-    print(f"\n📈 PERFORMANCE METRICS:")
+    print(f"\nPERFORMANCE METRICS:")
     print(f"   Accuracy:             {accuracy:.2f}%  (overall correctness)")
     print(f"   Precision:            {precision:.2f}%  (of denied, how many were fraud)")
     print(f"   Recall (Sensitivity): {recall:.2f}%  (of frauds, how many we caught)")
@@ -159,7 +159,7 @@ def load_and_test_csv(csv_path='data/transactional-sample.csv'):
             for i, m in enumerate(missed_sorted[:5], 1):
                 print(f"      {i}. Transaction {m['transaction_id']}: User {m['user_id']}, ${m['amount']:.2f}")
     
-    print(f"\n👥 USER ANALYSIS:")
+    print(f"\nUSER ANALYSIS:")
     user_stats = {}
     for r in recommendations:
         user_id = r['user_id']
@@ -179,7 +179,7 @@ def load_and_test_csv(csv_path='data/transactional-sample.csv'):
     print(f"   High-risk users:      {len(high_risk_users)} (≥50% fraud rate)")
     
     if high_risk_users:
-        print(f"\n   🚨 HIGH-RISK USERS:")
+        print(f"\n   HIGH-RISK USERS:")
         for uid in high_risk_users[:5]:
             stats = user_stats[uid]
             fraud_rate = stats['frauds'] / stats['total'] * 100
@@ -202,7 +202,7 @@ def analyze_rule_effectiveness(csv_path='data/transactional-sample.csv'):
     users_with_cbk = df[df['has_cbk'] == True]['user_id'].unique()
     total_users = df['user_id'].nunique()
     
-    print(f"\n🔍 RULE 1: Chargeback History")
+    print(f"\nRULE 1: Chargeback History")
     print(f"   Users with chargebacks: {len(users_with_cbk)}/{total_users} ({len(users_with_cbk)/total_users*100:.1f}%)")
     print(f"   Impact: These users are permanently blocked from future transactions")
     print(f"   Effectiveness: HIGH (100% precision for known fraudsters)")
@@ -210,7 +210,7 @@ def analyze_rule_effectiveness(csv_path='data/transactional-sample.csv'):
     df['transaction_date'] = pd.to_datetime(df['transaction_date'])
     df = df.sort_values('transaction_date')
     
-    print(f"\n🔍 RULE 2: Transaction Velocity (>3 in 2 minutes)")
+    print(f"\nRULE 2: Transaction Velocity (>3 in 2 minutes)")
     velocity_cases = []
     for user_id in df['user_id'].unique():
         user_txns = df[df['user_id'] == user_id].sort_values('transaction_date')
@@ -237,7 +237,7 @@ def analyze_rule_effectiveness(csv_path='data/transactional-sample.csv'):
     print(f"   Cases with fraud:       {velocity_with_fraud}/{len(velocity_cases)} ({velocity_with_fraud/len(velocity_cases)*100:.1f}% precision)" if len(velocity_cases) > 0 else "   Cases with fraud:       0")
     print(f"   Effectiveness:          MEDIUM (catches automated attacks)")
     
-    print(f"\n🔍 RULE 3: Amount Limit (>$1,000 in 24h)")
+    print(f"\nRULE 3: Amount Limit (>$1,000 in 24h)")
     amount_cases = []
     for user_id in df['user_id'].unique():
         user_txns = df[df['user_id'] == user_id].sort_values('transaction_date')
@@ -263,7 +263,7 @@ def analyze_rule_effectiveness(csv_path='data/transactional-sample.csv'):
     print(f"   Cases with fraud:       {amount_with_fraud}/{len(amount_cases)} ({amount_with_fraud/len(amount_cases)*100:.1f}% precision)" if len(amount_cases) > 0 else "   Cases with fraud:       0")
     print(f"   Effectiveness:          MEDIUM-HIGH (prevents large-scale fraud)")
     
-    print(f"\n💡 RECOMMENDATIONS:")
+    print(f"\nRECOMMENDATIONS:")
     print(f"   1. Rule 1 (Chargeback) is most effective - keep as highest priority")
     print(f"   2. Consider adjusting thresholds based on metrics above")
     print(f"   3. Add device fingerprinting for better fraud detection")
@@ -277,7 +277,7 @@ if __name__ == "__main__":
     csv_file = sys.argv[1] if len(sys.argv) > 1 else 'data/transactional-sample.csv'
     
     if not os.path.exists(csv_file):
-        print(f"\n❌ ERROR: File '{csv_file}' not found!")
+        print(f"\nERROR: File '{csv_file}' not found!")
         print(f"Download from: https://gist.github.com/cloudwalk-tests/76993838e65d7e0f988f40f1b1909c97")
         sys.exit(1)
     
