@@ -4,7 +4,7 @@ services:
   antifraud-api:
     build: .
     ports:
-      - "8000:8000"
+      - "8001:8001"
     volumes:
       - ./data:/app/data
     environment:
