@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     
     api_host: str = '0.0.0.0'
     api_port: int = 8000
-    api_title: str = 'CloudWalk Anti-Fraud API'
+    api_title: str = 'Anti-Fraud API'
     api_version: str = '1.0.0'
     
     log_level: str = 'INFO'

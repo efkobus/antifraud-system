@@ -1,6 +1,6 @@
-# CloudWalk Anti-Fraud API 🛡️
+# Anti-Fraud API 🛡️
 
-Anti-fraud system developed as part of CloudWalk's technical challenge. This system analyzes transactions in real-time and decides whether they should be approved or denied based on fraud detection rules.
+This system analyzes transactions in real-time and decides whether they should be approved or denied based on fraud detection rules.
 
 ## 📋 Features
 
@@ -253,14 +253,6 @@ Analyzes a transaction and returns recommendation.
 
 This is a technical challenge project. Suggestions and improvements are welcome!
 
-## 📄 License
-
-This project was developed for CloudWalk's technical challenge.
-
 ## 👤 Author
 
 Eduardo Kobus
-
----
-
-**CloudWalk - Software Engineer Challenge**
