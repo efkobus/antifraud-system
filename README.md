@@ -249,10 +249,6 @@ Analyzes a transaction and returns recommendation.
 }
 ```
 
-## 🤝 Contributing
-
-This is a technical challenge project. Suggestions and improvements are welcome!
-
 ## 👤 Author
 
 Eduardo Kobus
