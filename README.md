@@ -12,6 +12,48 @@ This system analyzes transactions in real-time and decides whether they should b
 - **Comprehensive unit tests**
 - **Configurable settings** via `.env` file
 
+## 🏗️ System Architecture
+
+```mermaid
+  graph TD
+    %% Styling Definitions
+    classDef plain fill:#fff,stroke:#cbd5e1,stroke-width:1px,color:#334155,font-family:'Inter';
+    classDef highlight fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e3a8a,font-family:'Inter';
+    classDef db fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#92400e,font-family:'Inter';
+    
+    Client[Client / Payment Gateway]:::plain -->|JSON Payload| API[FastAPI Controller]:::highlight
+
+    subgraph "Anti-Fraud System"
+        direction TB
+        API -->|Validate| Models[Pydantic Models]:::plain
+        Models -->|Valid Data| Service[Anti-Fraud Service]:::highlight
+
+        subgraph "Logic Layer"
+            direction TB
+            Service -->|Check| Rule1[Rule: Chargeback History]:::plain
+            Service -->|Check| Rule2[Rule: Velocity]:::plain
+            Service -->|Check| Rule3[Rule: Amount Limit]:::plain
+        end
+
+        Service <-->|Read/Write| DB[(SQLite Database)]:::db
+    end
+
+    Service -->|Recommendation| API
+    API -->|Approve / Deny| Client
+```
+
+### Flow Description
+
+1. **Client/Gateway** sends transaction (JSON payload)
+2. **FastAPI Controller** (`main.py`) receives and routes the request
+3. **Pydantic Models** (`models.py`) validate data format and types
+4. **Anti-Fraud Service** (`antifraud.py`) executes business logic:
+   - ✅ **Chargeback History**: Denies if user has prior fraud
+   - ✅ **Velocity Check**: Denies if >3 transactions in 2 minutes
+   - ✅ **Amount Limit**: Denies if sum in 24h > $1,000
+5. **SQLite Database** stores/retrieves historical data (card hashes, transactions)
+6. **Recommendation** (approve/deny) returns to client
+
 ## 🚀 Installation
 
 ### Prerequisites
